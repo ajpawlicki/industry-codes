@@ -18,5 +18,9 @@
   "homepage": "https://github.com/ajpawlicki/industry-codes#readme",
   "devDependencies": {
     "pdfreader": "^0.2.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4"
   }
 }
