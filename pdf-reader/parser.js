@@ -14,12 +14,11 @@ new pdfreader.PdfReader().parseFileItems(__dirname + filepath, function(err, ite
     const matrix = generateMatrix(rows);
 
     if (matrix) {
-      
+      matrix.pop();
+      handleTextOverFlow(matrix);
     }
-    removeLastRow(rows);
-    handleTextOverFlow(rows);
-    // unshiftMissingCells(rows);
-    console.log('rows: ', rows);
+    console.log(matrix);
+
     // end of file, or page
     printRows();
     console.log('PAGE:', item.page);
@@ -46,17 +45,25 @@ function generateMatrix(rows) {
   }
 };
 
-function removeLastRow(rows) {
-  const keys = Object.keys(rows);
-  
-  if (keys.length > 0) {
-    const lastRowKey = Math.max.apply(null, keys);
-    delete rows[lastRowKey];
+function handleTextOverFlow(matrix) {
+  let row, overflow, prev, str;
+  for (let i = 0; i < matrix.length; i++) {
+    row = matrix[i];
+    if (row.length <= 2) {
+      
+      while (row.length > 0) {
+        overflow = row.shift();
+        prev = matrix[i-1];
+        
+        for (let j = 0; j < prev.length; j++) {
+          str = prev[j];
+          if (str[str.length - 1] === ' ') prev[j] += overflow;
+        }
+      }
+
+      matrix.splice(i, 1);
+    }
   }
-};
-
-function handleTextOverFlow(rows) {
-
 };
 
 function unshiftMissingCells(rows) {
