@@ -16,11 +16,13 @@ new pdfreader.PdfReader().parseFileItems(__dirname + filepath, function(err, ite
     if (matrix) {
       matrix.pop();
       handleTextOverFlow(matrix);
+      unshiftMissingCells(matrix);
+      populateMissingText(matrix);
+      matrix.forEach((row) => console.log(row.join(' | ')));
     }
-    console.log(matrix);
 
     // end of file, or page
-    printRows();
+    // printRows();
     console.log('PAGE:', item.page);
     rows = {}; // clear rows for next page
   }
@@ -66,10 +68,38 @@ function handleTextOverFlow(matrix) {
   }
 };
 
-function unshiftMissingCells(rows) {
-  for (let row in rows) {
-    while (rows[row].length < 13) {
-      rows[row].unshift('');
+function unshiftMissingCells(matrix) {
+  for (let row of matrix) {
+    while (row.length < 13) {
+      row.unshift(null);
     }
   }
+};
+
+function populateMissingText(matrix) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+  // iterate thru matrix
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      // if cell in row above and cell in row below are null
+      if (isSafeToVisit(matrix, i-1, j) && isSafeToVisit(matrix, i+1, j) && matrix[i][j] !== null) {
+        // call DFS
+        DFS(matrix, i, j, matrix[i][j]);
+      }
+    }
+  }
+};
+
+function isSafeToVisit(matrix, row, col) {
+  const isValidRow = (row >= 0) && (row < matrix.length);
+  const isValidCol = (col >= 0) && (col < matrix[0].length);
+  return isValidRow && isValidCol && matrix[row][col] === null;
+};
+
+function DFS(matrix, row, col, text) {
+  matrix[row][col] = text;
+  
+  if (isSafeToVisit(matrix, row-1, col)) DFS(matrix, row-1, col, text);
+  if (isSafeToVisit(matrix, row+1, col)) DFS(matrix, row+1, col, text);
 };
