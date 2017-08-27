@@ -6,7 +6,7 @@ const codeSchema = mongoose.Schema({
   ISO_CGL: String,
   SIC: String,
   NAICS: String,
-  General_Description: String,
+  General_Description: {type: String, unique: true, dropDups: true, required: true},
   NCCI: String,
   CA_WC: String,
   DE_WC: String,
