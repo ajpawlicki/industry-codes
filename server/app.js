@@ -7,9 +7,13 @@ const app = express();
 
 const bodyParser = require('body-parser');
 
+const getCodes = require('./handlers/handlers.js').getCodes;
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/../client/dist'));
+
+app.get('/api/codes/type/:type/code/:code', getCodes);
 
 const port = process.env.PORT || 3000;
 
