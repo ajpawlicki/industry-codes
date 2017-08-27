@@ -1,6 +1,8 @@
 const pdfreader = require('pdfreader');
 const filepath = '/assets/test_codes.pdf'
 
+const postCode = require('../database/helpers.js').postCode;
+
 let rows = {}; // indexed by y-position
 
 function printRows() {
@@ -18,7 +20,8 @@ new pdfreader.PdfReader().parseFileItems(__dirname + filepath, function(err, ite
       handleTextOverFlow(matrix);
       unshiftMissingCells(matrix);
       populateMissingText(matrix);
-      matrix.forEach((row) => console.log(row.join(' | ')));
+      postToDB(matrix);
+      // matrix.forEach((row) => console.log(row.join(' | ')));
     }
 
     // end of file, or page
@@ -102,4 +105,18 @@ function DFS(matrix, row, col, text) {
   
   if (isSafeToVisit(matrix, row-1, col)) DFS(matrix, row-1, col, text);
   if (isSafeToVisit(matrix, row+1, col)) DFS(matrix, row+1, col, text);
+};
+
+function postToDB(matrix) {
+  const headers = matrix.shift().map(str => str.replace(' ', '_'));
+  let codeData;
+
+  matrix.forEach((row) => {
+    codeData = row.reduce((acc, curr, index) => {
+      acc[headers[index]] = curr;
+      return acc;
+    }, {});
+        
+    postCode(codeData);
+  });
 };
