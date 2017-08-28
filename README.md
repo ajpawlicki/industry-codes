@@ -8,8 +8,16 @@ In your root directory run, `npm install`.
 ### Development
 In your root directory run, `npm run start`.
 
+### Deployment
+App is currently deployed at https://industry-codes.herokuapp.com/.
+
 ## How To Use
-* Select the type of code in the dropdown menu.
+* Select the code type in the dropdown menu.
 * Input the code value that you are looking for in the input box to the right of the dropdown.
+* Submit form.
 * Data will return in a list format underneath the form.
 * If there is no relevant data, a message will display indicating there is no data for that code.
+
+## To do
+* Figure out how to accurately populate blank cells in pdf.
+* Add styling.
