@@ -69,6 +69,7 @@ function handleTextOverFlow(matrix) {
       }
 
       matrix.splice(i, 1);
+      i--;
     }
   }
 };
