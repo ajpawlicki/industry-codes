@@ -12,6 +12,7 @@ function printRows() {
 };
 
 module.exports = function() {
+  console.log('hit pdf parser!');
   new pdfreader.PdfReader().parseFileItems(__dirname + filepath, function(err, item){
     if (!item || item.page) {
       const matrix = generateMatrix(rows);
