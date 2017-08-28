@@ -10,7 +10,6 @@ module.exports.getCodes = (req, res) => {
   search[type] = code;
 
   Code.find(search).then(codes => {
-    // console.log('codes: ', codes);
     res.send(codes);
   });
 };
