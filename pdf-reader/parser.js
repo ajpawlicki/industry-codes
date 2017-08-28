@@ -11,29 +11,31 @@ function printRows() {
     .forEach((y) => console.log((rows[y] || []).join(' | ')));
 };
 
-new pdfreader.PdfReader().parseFileItems(__dirname + filepath, function(err, item){
-  if (!item || item.page) {
-    const matrix = generateMatrix(rows);
+module.exports = function() {
+  new pdfreader.PdfReader().parseFileItems(__dirname + filepath, function(err, item){
+    if (!item || item.page) {
+      const matrix = generateMatrix(rows);
 
-    if (matrix) {
-      matrix.pop();
-      handleTextOverFlow(matrix);
-      unshiftMissingCells(matrix);
-      populateMissingText(matrix);
-      postToDB(matrix);
-      // matrix.forEach((row) => console.log(row.join(' | ')));
+      if (matrix) {
+        matrix.pop();
+        handleTextOverFlow(matrix);
+        unshiftMissingCells(matrix);
+        populateMissingText(matrix);
+        postToDB(matrix);
+        // matrix.forEach((row) => console.log(row.join(' | ')));
+      }
+
+      // end of file, or page
+      // printRows();
+      console.log('PAGE:', item.page);
+      rows = {}; // clear rows for next page
     }
-
-    // end of file, or page
-    // printRows();
-    console.log('PAGE:', item.page);
-    rows = {}; // clear rows for next page
-  }
-  if (item.text) {
-    // accumulate text items into rows object, per line
-    (rows[item.y] = rows[item.y] || []).push(item.text);
-  }
-});
+    if (item.text) {
+      // accumulate text items into rows object, per line
+      (rows[item.y] = rows[item.y] || []).push(item.text);
+    }
+  });
+}
 
 function generateMatrix(rows) {
   const keys = Object.keys(rows);

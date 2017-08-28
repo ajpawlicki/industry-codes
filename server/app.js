@@ -8,7 +8,7 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const getCodes = require('./handlers/handlers.js').getCodes;
-const parser = require('../pdf-reader/parser.js');
+const parser = require('../pdf-reader/parser.js')();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
