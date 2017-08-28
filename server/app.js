@@ -12,8 +12,9 @@ const parser = require('../pdf-reader/parser.js')();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(express.static(__dirname + '/../client/dist'));
+app.use(express.static(__dirname + '/../client/dist'));
 
+app.get('/', (req, res) => res.send('TEST'));
 app.get('/api/codes/type/:type/code/:code', getCodes);
 
 const port = process.env.PORT || 3000;
