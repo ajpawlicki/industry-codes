@@ -17,7 +17,7 @@ module.exports = function() {
       const matrix = generateMatrix(rows);
 
       if (matrix) {
-        matrix.pop();
+        matrix.pop(); // remove last row b/c irrelevant to data
         handleTextOverFlow(matrix);
         unshiftMissingCells(matrix);
         populateMissingText(matrix);
@@ -54,6 +54,7 @@ function generateMatrix(rows) {
 
 function handleTextOverFlow(matrix) {
   let row, overflow, prev, str;
+  
   for (let i = 0; i < matrix.length; i++) {
     row = matrix[i];
     if (row.length <= 2) {
