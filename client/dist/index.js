@@ -42,6 +42,8 @@ window.onload = () => {
           codeList.innerHTML = 'There is no data for that code.';
         }
       });
+    } else {
+      codeList.innerHTML = 'Please enter a value in the input box.';
     }
 
   });
