@@ -2,6 +2,8 @@ const mongoose = require('./config.js').mongoose;
 const db = require('./config.js').db;
 
 const codeSchema = mongoose.Schema({
+  ISO_Description: String,
+  ISO_CGL: String,
   SIC: String,
   NAICS: String,
   General_Description: {type: String, unique: true, dropDups: true, required: true},
