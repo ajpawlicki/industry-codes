@@ -1,5 +1,5 @@
 const pdfreader = require('pdfreader');
-const filepath = '/assets/test_codes.pdf'
+const filepath = '/assets/full_list.pdf'
 
 const postCode = require('../database/helpers.js').postCode;
 
