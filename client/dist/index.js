@@ -33,7 +33,7 @@ window.onload = () => {
     codeInput.value = ''
 
     if (trimmedInputValue.length > 0) {
-      $.get(`/api/codes/type/${typeInput.value}/code/${trimmedInputValue}`, (codes) => {
+      $.get(`/api/codes/type/${encodeURIComponent(typeInput.value)}/code/${encodeURIComponent(trimmedInputValue)}`, (codes) => {
         if (codes.length > 0) {
           addToList(codes, codeList);
         } else {
