@@ -20,7 +20,6 @@ module.exports = function() {
         matrix.pop(); // remove last row b/c irrelevant to data
         handleTextOverFlow(matrix);
         unshiftMissingCells(matrix);
-        populateMissingText(matrix);
         postToDB(matrix);
         // matrix.forEach((row) => console.log(row.join(' | ')));
       }

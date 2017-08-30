@@ -14,8 +14,6 @@ window.onload = () => {
       let listItem = document.createElement('li');
 
       listItem.innerHTML = `
-        <div>ISO Description: ${item.ISO_Description}</div>
-        <div>ISO CGL: ${item.ISO_CGL}</div>
         <div>SIC: ${item.SIC}</div>
         <div>NAICS: ${item.NAICS}</div>
         <div>General Description: ${item.General_Description}</div>
