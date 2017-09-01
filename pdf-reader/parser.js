@@ -1,8 +1,8 @@
 const pdfreader = require('pdfreader');
-const filepath = '/assets/13.pdf'
+const filepath = '/assets/full_list.pdf'
 
-const generateMatrix = require('./helpers.js').generateMatrix;
-const postToDB = require('./helpers.js').postToDB;
+const {generateMatrix, postToDB, removeISOCols, handleTextWrapping} = require('./helpers.js');
+const {checkTextForTrailingChar, checkRowLength} = require('./tests');
 
 let rows = {}; // indexed by y-position
 
@@ -19,6 +19,10 @@ module.exports = function() {
 
       if (matrix) {
         matrix.pop(); // remove last row b/c irrelevant to data
+        removeISOCols(matrix);
+        handleTextWrapping(matrix);
+        checkTextForTrailingChar(matrix);
+        checkRowLength(matrix, 11);
         postToDB(matrix);
         // matrix.forEach((row) => console.log(row.join(' | ')));
       }
