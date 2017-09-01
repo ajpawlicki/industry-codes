@@ -1,5 +1,5 @@
 const pdfreader = require('pdfreader');
-const filepath = '/assets/full_list.pdf'
+const filepath = '/assets/13.pdf'
 
 const postCode = require('../database/helpers.js').postCode;
 
@@ -53,6 +53,11 @@ function generateMatrix(rows) {
 
 function handleTextOverFlow(matrix) {
   let row, overflow, prev, str;
+
+  const trailingSymbols = {
+    ' ': true,
+    '-': true
+  };
   
   for (let i = 0; i < matrix.length; i++) {
     row = matrix[i];
@@ -64,7 +69,10 @@ function handleTextOverFlow(matrix) {
         
         for (let j = 0; j < prev.length; j++) {
           str = prev[j];
-          if (str[str.length - 1] === ' ') prev[j] += overflow;
+          if (trailingSymbols[str[str.length - 1]] === true) {
+            prev[j] += overflow;
+            break;
+          }
         }
       }
 
