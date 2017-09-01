@@ -1,3 +1,5 @@
+const postCode = require('../database/helpers.js').postCode;
+
 module.exports.generateMatrix = function(rows) {
   const keys = Object.keys(rows);
   
@@ -13,10 +15,61 @@ module.exports.generateMatrix = function(rows) {
   }
 };
 
+module.exports.postToDB = function(matrix) {
+  const headers = matrix.shift().map(str => str.replace(' ', '_'));
+  let codeData;
+
+  matrix.forEach((row) => {
+    codeData = row.reduce((acc, curr, index) => {
+      acc[headers[index]] = curr;
+      return acc;
+    }, {});
+        
+    postCode(codeData);
+  });
+};
+
+module.exports.removeISOCols = function(matrix) {
+  for (let row of matrix) {
+    while (row.length > 11) {
+      row.shift();
+    }
+  }
+};
+
+module.exports.handleTextWrapping = function(matrix) {
+  let row, overflow, prevRow, text;
+  
+  const trailingChars = {
+    ' ': true,
+    '-': true
+  };
+  
+  for (let i = 0; i < matrix.length; i++) {
+    row = matrix[i];
+
+    if (row.length <= 2) {
+      
+      if (row.length === 2) row.shift(); // remove ISO Desc overflow
+      overflow = row.shift();
+      prevRow = matrix[i-1];
+      text = prevRow[2];
+
+      // Make sure overflow is meant for General Desc
+      if (trailingChars[text[text.length - 1]] === true) {
+        prevRow[2] += overflow;
+      }
+      
+      matrix.splice(i, 1);
+      i--;
+    }
+  }
+};
+
 module.exports.handleTextOverFlow = function(matrix) {
   let row, overflow, prev, str;
 
-  const trailingSymbols = {
+  const trailingChars = {
     ' ': true,
     '-': true
   };
@@ -31,7 +84,7 @@ module.exports.handleTextOverFlow = function(matrix) {
         
         for (let j = 0; j < prev.length; j++) {
           str = prev[j];
-          if (trailingSymbols[str[str.length - 1]] === true) {
+          if (trailingChars[str[str.length - 1]] === true) {
             prev[j] += overflow;
             break;
           }
@@ -78,18 +131,4 @@ function DFS(matrix, row, col, text) {
   
   if (isSafeToVisit(matrix, row-1, col)) DFS(matrix, row-1, col, text);
   if (isSafeToVisit(matrix, row+1, col)) DFS(matrix, row+1, col, text);
-};
-
-module.exports.postToDB = function(matrix) {
-  const headers = matrix.shift().map(str => str.replace(' ', '_'));
-  let codeData;
-
-  matrix.forEach((row) => {
-    codeData = row.reduce((acc, curr, index) => {
-      acc[headers[index]] = curr;
-      return acc;
-    }, {});
-        
-    postCode(codeData);
-  });
 };
